@@ -44,6 +44,7 @@ Responsive + UX clara (colores por estado, badges de vencimiento)
 - **Typed Reactive Forms** con `FormArray` para subtareas dinámicas, manteniendo tipado estricto en validaciones y payloads.
 - Aplicar `ChangeDetectionStrategy.OnPush` en componentes de presentación y contenedores donde corresponda.
 - Mantener una estructura de carpetas limpia y escalable: `core`, `features/tasks`, `shared`, `ui`, `layouts`, `models`, `services`.
+- Dentro de cada feature (p. ej. `features/tasks`), separar **UI presentacional** en `ui/<nombre-componente>/` (componente + template + estilos), dejar **`data-access/`** y **`pages/`** en la raíz del feature y rutas en `tasks.routes.ts`, alineado a enfoque feature-first y Angular 21 (refactor aplicado 21 abr 2026).
 
 ### Solución de problemas de performance
 - Usar `computed()` para derivaciones de estado y memoización de cálculos frecuentes.

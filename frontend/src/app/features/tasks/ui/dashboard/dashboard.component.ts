@@ -4,8 +4,8 @@ import { RouterLink } from '@angular/router';
 import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
-import { TaskFormComponent } from './task-form.component';
-import { TaskDetailComponent } from './task-detail.component';
+import { TaskFormComponent } from '../task-form/task-form.component';
+import { TaskDetailComponent } from '../task-detail/task-detail.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -102,7 +102,7 @@ export class DashboardComponent {
 
   private async loadDashboardData(): Promise<void> {
     await Promise.all([
-      this.taskStore.loadTasks({ page: 0, size: 1 }),
+      this.taskStore.loadTasks({ page: 0, size: 1 }, { updateListSlice: false }),
       this.taskStore.findPending(10),
       this.taskStore.findOverdue(10)
     ]);

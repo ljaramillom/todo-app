@@ -45,7 +45,10 @@ Este prompt funciona como estándar base y debe considerarse antes de implementa
 **Prompt 9 - dashboard.component (21 abr 2026)**  
 "Implementa `dashboard.component` como ruta principal (`/`) con `ChangeDetectionStrategy.OnPush`, consumo Signals de `TaskStore` (`pendingTasks`, `overdueTasks`, conteos y total), secciones de alertas overdue y pendientes de ejecucion con `@defer` + `trackBy`, acciones directas (nueva tarea, ver todas, detalle), UI con TailwindCSS 4 + daisyUI, e integración de routing para que el listado completo quede en `/tasks`."
 
-**Prompt 10 - Finalización del proyecto (Layout + Docker + README) - 21 abr 2026**  
+**Prompt 10 - Refactor estructura features/tasks (21 abr 2026)**  
+"Reorganiza el feature `tasks` en estructura escalable: carpeta `ui/` con subcarpetas por componente (`dashboard/`, `tasks-list/`, `task-form/`, `task-detail/`), mantener `data-access/` y `pages/` en la raíz del feature; actualizar rutas lazy, imports relativos y alias `@features/tasks/...` sin cambiar lógica (OnPush, Signals, `@defer`, `trackBy`)."
+
+**Prompt 11 - Finalización del proyecto (Layout + Docker + README) - 21 abr 2026**  
 "Cierra el proyecto con un layout global reusable (`app-layout`) con navegación principal y acceso rápido a nueva tarea; actualiza Docker Compose para ejecutar `db + backend + frontend` en producción (frontend servido con Nginx); crea README profesional con stack, ejecución y flujos de prueba; y actualiza evidencia `.plan` marcando fases finales como completadas y proyecto 100% finalizado."
 
 (Más prompts se irán agregando aquí durante el desarrollo)

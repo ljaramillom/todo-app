@@ -97,7 +97,15 @@ export class TaskStore {
     this.document.defaultView?.localStorage.setItem(this.storageKey, JSON.stringify(filters));
   });
 
-  async loadTasks(overrides: Partial<TaskListQueryParams> = {}): Promise<void> {
+  /**
+   * Si `updateListSlice` es false, solo sincroniza `totalElements` (p. ej. contador del dashboard con size mínimo)
+   * sin tocar `tasks`, `page`, `size` ni `totalPages` del listado principal.
+   */
+  async loadTasks(
+    overrides: Partial<TaskListQueryParams> = {},
+    options: { updateListSlice?: boolean } = {}
+  ): Promise<void> {
+    const updateListSlice = options.updateListSlice !== false;
     const current = this.state();
     const query = this.buildListQuery(current, overrides);
 
@@ -105,14 +113,21 @@ export class TaskStore {
 
     try {
       const pageResponse = await firstValueFrom(this.taskService.listTasks(query));
-      this.state.update((value) => ({
-        ...value,
-        tasks: pageResponse.content,
-        page: pageResponse.number,
-        size: pageResponse.size,
-        totalElements: pageResponse.totalElements,
-        totalPages: pageResponse.totalPages
-      }));
+      if (updateListSlice) {
+        this.state.update((value) => ({
+          ...value,
+          tasks: pageResponse.content,
+          page: pageResponse.number,
+          size: pageResponse.size,
+          totalElements: pageResponse.totalElements,
+          totalPages: pageResponse.totalPages
+        }));
+      } else {
+        this.state.update((value) => ({
+          ...value,
+          totalElements: pageResponse.totalElements
+        }));
+      }
     } catch {
       this.state.update((value) => ({
         ...value,

@@ -15,7 +15,14 @@ RUN mvn -B -DskipTests package \
 FROM eclipse-temurin:25-jre-alpine AS runtime
 WORKDIR /app
 
-RUN addgroup -S spring -g 1000 && adduser -S spring -u 1000 -G spring
+# Hora Colombia (UTC-5, sin DST): JVM + libc + Hibernate/Jackson vía env (sobrescribe application.yml en contenedor).
+RUN apk add --no-cache tzdata \
+    && addgroup -S spring -g 1000 \
+    && adduser -S spring -u 1000 -G spring
+
+ENV TZ=America/Bogota
+ENV SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_TIME_ZONE=America/Bogota
+ENV SPRING_JACKSON_TIME_ZONE=America/Bogota
 
 COPY --from=builder /build/dependencies/ ./
 COPY --from=builder /build/spring-boot-loader/ ./
@@ -26,6 +33,6 @@ USER spring:spring
 
 EXPOSE 8080
 
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+ENV JAVA_OPTS="-Duser.timezone=America/Bogota -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
 
 ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]

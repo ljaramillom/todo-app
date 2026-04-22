@@ -3,9 +3,9 @@ import { DatePipe } from '@angular/common';
 import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
-import { UpdateTaskRequestDto } from './data-access/task.dto';
-import { TaskFormComponent } from './task-form.component';
-import { TaskDetailComponent } from './task-detail.component';
+import { UpdateTaskRequestDto } from '../../data-access/task.dto';
+import { TaskFormComponent } from '../task-form/task-form.component';
+import { TaskDetailComponent } from '../task-detail/task-detail.component';
 
 type StatusFilterValue = TaskStatus | 'ALL';
 

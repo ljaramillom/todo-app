@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
 import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
-import { UpdateTaskRequestDto } from './data-access/task.dto';
+import { UpdateTaskRequestDto } from '../../data-access/task.dto';
 
 @Component({
   selector: 'app-task-detail',

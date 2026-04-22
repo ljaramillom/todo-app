@@ -17,7 +17,7 @@ import {
 } from '@angular/forms';
 import { TaskStore } from '@core/state/task.store';
 import { Subtask, TaskStatus } from '@shared/models/task.model';
-import { CreateTaskRequestDto, UpdateTaskRequestDto } from './data-access/task.dto';
+import { CreateTaskRequestDto, UpdateTaskRequestDto } from '../../data-access/task.dto';
 
 type SubtaskFormGroup = FormGroup<{
   id: FormControl<number | null>;

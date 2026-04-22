@@ -4,7 +4,7 @@ export const TASKS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./dashboard.component').then((m) => m.DashboardComponent)
+      import('./ui/dashboard/dashboard.component').then((m) => m.DashboardComponent)
   },
   {
     path: 'tasks',

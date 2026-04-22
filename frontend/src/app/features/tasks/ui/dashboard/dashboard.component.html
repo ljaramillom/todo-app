@@ -40,10 +40,7 @@
 
   @defer (on idle) {
     <section class="rounded-box border border-base-300 bg-base-100 p-5 shadow-sm">
-      <div class="mb-3 flex items-center justify-between gap-3">
-        <h2 class="text-xl font-semibold">Alertas de tareas vencidas</h2>
-        <span class="badge badge-error text-white">{{ overdueTasksCount() }} overdue</span>
-      </div>
+      <h2 class="mb-3 text-xl font-semibold">Alertas de tareas vencidas</h2>
 
       @if (hasOverdue()) {
         <ul class="space-y-2">
