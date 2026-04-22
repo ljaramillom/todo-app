@@ -6,12 +6,13 @@ import { taskStatusLabel } from '@shared/utils/task-status-label';
 import { UpdateTaskRequestDto } from '../../data-access/task.dto';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
+import { ConfirmDialogComponent } from '@shared/ui/confirm-dialog/confirm-dialog.component';
 
 type StatusFilterValue = TaskStatus | 'ALL';
 
 @Component({
   selector: 'app-tasks-list',
-  imports: [DatePipe, TaskFormComponent, TaskDetailComponent],
+  imports: [DatePipe, TaskFormComponent, TaskDetailComponent, ConfirmDialogComponent],
   templateUrl: './tasks-list.component.html',
   styleUrl: './tasks-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,6 +31,8 @@ export class TasksListComponent {
   protected readonly editingTaskId = signal<number | null>(null);
   protected readonly detailOpen = signal(false);
   protected readonly detailTaskId = signal<number | null>(null);
+  protected readonly deleteConfirmOpen = signal(false);
+  protected readonly taskPendingDelete = signal<Task | null>(null);
 
   protected readonly tasks = this.taskStore.tasks;
   protected readonly loading = this.taskStore.loading;
@@ -63,6 +66,10 @@ export class TasksListComponent {
   protected readonly hasPreviousPage = computed(() => this.currentPage() > 0);
   protected readonly hasNextPage = computed(() => this.currentPage() + 1 < this.totalPages());
   protected readonly hasTasks = computed(() => this.tasks().length > 0);
+  protected readonly deleteConfirmMessage = computed(() => {
+    const task = this.taskPendingDelete();
+    return task ? `¿Deseas eliminar la tarea "${task.title}"?` : '';
+  });
 
   protected readonly statusOptions: ReadonlyArray<{ label: string; value: StatusFilterValue }> = [
     { label: 'Todos', value: 'ALL' },
@@ -140,9 +147,20 @@ export class TasksListComponent {
     await this.reloadCurrentPage();
   }
 
-  protected async deleteTask(task: Task): Promise<void> {
-    const confirmed = window.confirm(`Deseas eliminar la tarea "${task.title}"?`);
-    if (!confirmed) {
+  protected openDeleteConfirm(task: Task): void {
+    this.taskPendingDelete.set(task);
+    this.deleteConfirmOpen.set(true);
+  }
+
+  protected closeDeleteConfirm(): void {
+    this.deleteConfirmOpen.set(false);
+    this.taskPendingDelete.set(null);
+  }
+
+  protected async onDeleteConfirmed(): Promise<void> {
+    const task = this.taskPendingDelete();
+    this.closeDeleteConfirm();
+    if (!task) {
       return;
     }
 

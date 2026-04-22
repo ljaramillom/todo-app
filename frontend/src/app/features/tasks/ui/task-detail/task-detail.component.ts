@@ -13,10 +13,11 @@ import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
 import { UpdateTaskRequestDto } from '../../data-access/task.dto';
+import { ConfirmDialogComponent } from '@shared/ui/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-task-detail',
-  imports: [DatePipe],
+  imports: [DatePipe, ConfirmDialogComponent],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -54,6 +55,18 @@ export class TaskDetailComponent {
       return false;
     }
     return new Date(currentTask.executionDate).getTime() < Date.now();
+  });
+
+  protected readonly deleteConfirmOpen = signal(false);
+  protected readonly deleteConfirmMessage = computed(() => {
+    const currentTask = this.task();
+    return currentTask ? `¿Deseas eliminar la tarea "${currentTask.title}"?` : '';
+  });
+
+  private readonly closeDeleteConfirmWhenDetailClosed = effect(() => {
+    if (!this.open()) {
+      this.deleteConfirmOpen.set(false);
+    }
   });
 
   private readonly loadTaskEffect = effect(() => {
@@ -98,14 +111,21 @@ export class TaskDetailComponent {
     }
   }
 
-  protected async deleteTask(): Promise<void> {
-    const currentTask = this.task();
-    if (!currentTask) {
+  protected openDeleteConfirm(): void {
+    if (!this.task()) {
       return;
     }
+    this.deleteConfirmOpen.set(true);
+  }
 
-    const confirmed = window.confirm(`Deseas eliminar la tarea "${currentTask.title}"?`);
-    if (!confirmed) {
+  protected closeDeleteConfirm(): void {
+    this.deleteConfirmOpen.set(false);
+  }
+
+  protected async onDeleteConfirmed(): Promise<void> {
+    const currentTask = this.task();
+    this.closeDeleteConfirm();
+    if (!currentTask) {
       return;
     }
 

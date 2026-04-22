@@ -105,7 +105,7 @@
           <button type="button" class="btn btn-warning" (click)="changeTaskStatus()" [disabled]="mutating()">
             Cambiar estado
           </button>
-          <button type="button" class="btn btn-error text-white" (click)="deleteTask()" [disabled]="mutating()">
+          <button type="button" class="btn btn-error text-white" (click)="openDeleteConfirm()" [disabled]="mutating()">
             Eliminar
           </button>
           <button type="button" class="btn btn-ghost" (click)="close()">Cerrar</button>
@@ -122,3 +122,14 @@
     <button type="button" (click)="close()">close</button>
   </form>
 </dialog>
+
+<app-confirm-dialog
+  [open]="deleteConfirmOpen()"
+  title="Eliminar tarea"
+  [message]="deleteConfirmMessage()"
+  cancelLabel="Cancelar"
+  confirmLabel="Eliminar"
+  [confirmDanger]="true"
+  (confirm)="onDeleteConfirmed()"
+  (closed)="closeDeleteConfirm()"
+/>

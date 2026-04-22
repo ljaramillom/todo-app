@@ -188,7 +188,7 @@
                       type="button"
                       class="btn btn-error btn-xs shrink-0 text-white"
                       [disabled]="mutating()"
-                      (click)="deleteTask(task)"
+                      (click)="openDeleteConfirm(task)"
                     >
                       Eliminar
                     </button>
@@ -266,4 +266,15 @@
   (closed)="closeDetail()"
   (editRequested)="openEditFromDetail($event)"
   (deleted)="onDetailDeleted()"
+/>
+
+<app-confirm-dialog
+  [open]="deleteConfirmOpen()"
+  title="Eliminar tarea"
+  [message]="deleteConfirmMessage()"
+  cancelLabel="Cancelar"
+  confirmLabel="Eliminar"
+  [confirmDanger]="true"
+  (confirm)="onDeleteConfirmed()"
+  (closed)="closeDeleteConfirm()"
 />
