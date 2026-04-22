@@ -1,0 +1,9 @@
+# Reglas del proyecto TODO Tasks
+
+Siempre sigue los archivos de la carpeta .plan/ como fuente de verdad:
+- plan-backend.md → roadmap
+- data-model.md → entidades y relaciones
+- prompts-backend.md → estilo y decisiones técnicas
+- api-spec.md → endpoints
+
+Nunca inventes nada que contradiga estos archivos.

@@ -1,0 +1,137 @@
+<section class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 md:px-6">
+  <div class="hero rounded-box border border-base-300 bg-base-100 shadow-sm">
+    <div class="hero-content w-full flex-col items-start justify-between gap-6 lg:flex-row">
+      <div>
+        <h1 class="text-3xl font-bold">Panel de control TODO Tasks</h1>
+        <p class="mt-2 text-base-content/70">
+          Visualiza pendientes, alerta de vencidas y gestiona tareas rapidamente.
+        </p>
+      </div>
+      <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+        <button type="button" class="btn btn-primary" (click)="openCreateTask()">
+          + Nueva tarea
+        </button>
+        <a routerLink="/tasks" class="btn btn-soft btn-primary">Ver todas las tareas</a>
+        <button type="button" class="btn btn-ghost" (click)="refresh()">Actualizar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <article class="stat rounded-box border border-base-300 bg-base-100 shadow-sm">
+      <div class="stat-title">Total tareas</div>
+      <div class="stat-value text-primary">{{ totalTasksCount() }}</div>
+    </article>
+    <article class="stat rounded-box border border-base-300 bg-base-100 shadow-sm">
+      <div class="stat-title">Pendientes</div>
+      <div class="stat-value text-warning">{{ pendingTasksCount() }}</div>
+    </article>
+    <article class="stat rounded-box border border-base-300 bg-base-100 shadow-sm">
+      <div class="stat-title">Vencidas</div>
+      <div class="stat-value text-error">{{ overdueTasksCount() }}</div>
+    </article>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-error">
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  @defer (on idle) {
+    <section class="rounded-box border border-base-300 bg-base-100 p-5 shadow-sm">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <h2 class="text-xl font-semibold">Alertas de tareas vencidas</h2>
+        <span class="badge badge-error text-white">{{ overdueTasksCount() }} overdue</span>
+      </div>
+
+      @if (hasOverdue()) {
+        <ul class="space-y-2">
+          @for (task of overduePreview(); track trackByTaskId($index, task)) {
+            <li class="flex flex-col gap-2 rounded-box border border-error/40 bg-error/10 p-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p class="font-semibold">{{ task.title }}</p>
+                <p class="text-xs text-base-content/70">
+                  Fecha vencida: {{ task.executionDate | date: 'dd/MM/yyyy HH:mm' }}
+                </p>
+              </div>
+              <button type="button" class="btn btn-error btn-sm text-white" (click)="openDetail(task.id)">
+                Ver detalle
+              </button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <div class="rounded-box border border-dashed border-base-300 p-6 text-center text-sm text-base-content/70">
+          Excelente, no hay tareas vencidas en este momento.
+        </div>
+      }
+    </section>
+  } @placeholder {
+    <div class="space-y-2">
+      <div class="skeleton h-12 w-full"></div>
+      <div class="skeleton h-12 w-full"></div>
+    </div>
+  }
+
+  @defer (on idle) {
+    <section class="rounded-box border border-base-300 bg-base-100 p-5 shadow-sm">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <h2 class="text-xl font-semibold">Pendientes de ejecucion</h2>
+        <span class="badge badge-warning">{{ pendingTasksCount() }} pendientes</span>
+      </div>
+
+      @if (loading()) {
+        <div class="space-y-2">
+          <div class="skeleton h-12 w-full"></div>
+          <div class="skeleton h-12 w-full"></div>
+        </div>
+      } @else {
+        <ul class="space-y-2">
+          @for (task of pendingPreview(); track trackByTaskId($index, task)) {
+            <li class="flex flex-col gap-2 rounded-box border border-base-300 p-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p class="font-semibold">{{ task.title }}</p>
+                <p class="text-xs text-base-content/70">
+                  {{ task.executionDate | date: 'dd/MM/yyyy HH:mm' }}
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="badge" [class]="statusClass(task.status)">
+                  {{ statusLabel(task.status) }}
+                </span>
+                <button type="button" class="btn btn-soft btn-sm" (click)="openDetail(task.id)">
+                  Detalle
+                </button>
+              </div>
+            </li>
+          } @empty {
+            <li class="rounded-box border border-dashed border-base-300 p-6 text-center text-sm text-base-content/70">
+              No hay tareas pendientes para mostrar.
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  } @placeholder {
+    <div class="space-y-2">
+      <div class="skeleton h-12 w-full"></div>
+      <div class="skeleton h-12 w-full"></div>
+    </div>
+  }
+</section>
+
+<app-task-form
+  [open]="formOpen()"
+  [taskId]="formTaskId()"
+  (closed)="closeForm()"
+  (saved)="onFormSaved()"
+/>
+
+<app-task-detail
+  [open]="detailOpen()"
+  [taskId]="detailTaskId()"
+  (closed)="closeDetail()"
+  (editRequested)="openEditFromDetail($event)"
+  (deleted)="onDetailDeleted()"
+/>

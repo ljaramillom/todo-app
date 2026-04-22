@@ -1,0 +1,24 @@
+@config "../tailwind.config.js";
+@import "tailwindcss";
+@plugin "daisyui";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    @apply bg-base-200 text-base-content antialiased;
+  }
+}
+
+@layer components {
+  .app-section-card {
+    @apply rounded-box border border-base-300 bg-base-100 p-5 shadow-soft;
+  }
+}

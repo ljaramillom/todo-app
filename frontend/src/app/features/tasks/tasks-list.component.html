@@ -1,0 +1,267 @@
+<section class="rounded-box border border-base-300 bg-base-100 p-5 shadow-sm">
+  <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+    <div>
+      <h2 class="text-xl font-bold">Listado de tareas</h2>
+      <p class="mt-1 text-sm text-base-content/70">
+        Gestion central con filtros reactivos, paginacion y acciones rapidas.
+      </p>
+    </div>
+    <div class="stats stats-vertical border border-base-300 bg-base-100 shadow-sm md:stats-horizontal">
+      <article class="stat px-3 py-2">
+        <div class="stat-title text-xs">Pendientes</div>
+        <div class="stat-value text-lg text-warning">{{ pendingTasksCount() }}</div>
+      </article>
+      <article class="stat px-3 py-2">
+        <div class="stat-title text-xs">Vencidas</div>
+        <div class="stat-value text-lg text-error">{{ overdueTasksCount() }}</div>
+      </article>
+      <article class="stat px-3 py-2">
+        <div class="stat-title text-xs">Finalizadas</div>
+        <div class="stat-value text-lg text-success">{{ completedTasksCount() }}</div>
+      </article>
+    </div>
+  </div>
+
+  <div class="mt-4 flex justify-end">
+    <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ Nueva tarea</button>
+  </div>
+
+  <div class="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-12">
+    <label class="form-control lg:col-span-4">
+      <span class="label-text text-sm font-medium">Busqueda</span>
+      <input
+        type="search"
+        class="input input-bordered"
+        [value]="searchTerm()"
+        (input)="searchTerm.set(($any($event.target)).value)"
+        placeholder="Buscar por titulo o descripcion..."
+      />
+    </label>
+
+    <label class="form-control lg:col-span-3">
+      <span class="label-text text-sm font-medium">Estado</span>
+      <select
+        class="select select-bordered"
+        [value]="statusFilter()"
+        (change)="onStatusFilterChange(($any($event.target)).value)"
+      >
+        @for (option of statusOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+
+    <div class="flex flex-col justify-end gap-3 pb-0.5 lg:col-span-3">
+      <label class="label cursor-pointer justify-start gap-2">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-warning checkbox-sm"
+          [checked]="pendingOnlyFilter()"
+          (change)="onPendingOnlyChange(($any($event.target)).checked)"
+        />
+        <span class="label-text">Solo pendientes</span>
+      </label>
+      <label class="label cursor-pointer justify-start gap-2">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-error checkbox-sm"
+          [checked]="overdueFilter()"
+          (change)="onOverdueChange(($any($event.target)).checked)"
+        />
+        <span class="label-text">Solo vencidas</span>
+      </label>
+    </div>
+
+    <div class="flex min-w-0 flex-wrap items-end gap-2 sm:flex-nowrap lg:col-span-2">
+      <button type="button" class="btn btn-soft btn-primary min-w-0 flex-1" (click)="refresh()">
+        Actualizar
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost min-w-0 flex-1"
+        [disabled]="activeFiltersCount() === 0"
+        (click)="clearFilters()"
+      >
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+    <p class="text-base-content/70">
+      Mostrando <span class="font-semibold">{{ tasks().length }}</span> de
+      <span class="font-semibold">{{ totalElements() }}</span> tareas.
+    </p>
+    <div class="badge badge-outline badge-primary">Filtros activos: {{ activeFiltersCount() }}</div>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-error mt-4 text-sm">
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  @defer (on idle) {
+    <div class="mt-5 overflow-x-auto">
+      @if (loading()) {
+        <div class="space-y-2">
+          <div class="skeleton h-12 w-full"></div>
+          <div class="skeleton h-12 w-full"></div>
+          <div class="skeleton h-12 w-full"></div>
+        </div>
+      } @else if (hasTasks()) {
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Tarea</th>
+              <th>Ejecucion</th>
+              <th>Estado</th>
+              <th>Subtareas</th>
+              <th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (task of tasks(); track trackByTaskId($index, task)) {
+              <tr>
+                <td>
+                  <div class="max-w-[22rem]">
+                    <p class="font-semibold leading-tight">{{ task.title }}</p>
+                    <p class="line-clamp-2 text-xs text-base-content/70">
+                      {{ task.description || 'Sin descripcion' }}
+                    </p>
+                  </div>
+                </td>
+                <td class="whitespace-nowrap text-sm">
+                  {{ task.executionDate | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="badge" [class]="statusClass(task.status)">
+                      {{ statusLabel(task.status) }}
+                    </span>
+                    @if (isOverdue(task)) {
+                      <span class="badge badge-error text-white">Overdue</span>
+                    }
+                  </div>
+                </td>
+                <td>
+                  <div class="flex flex-wrap gap-1">
+                    @if (task.subtasks.length === 0) {
+                      <span class="badge badge-ghost">Sin subtareas</span>
+                    } @else {
+                      @for (subtask of task.subtasks.slice(0, 2); track trackBySubtaskId($index, subtask)) {
+                        <label class="label cursor-pointer gap-2 rounded-box border border-base-300 px-2 py-1">
+                          <input
+                            type="checkbox"
+                            class="checkbox checkbox-xs"
+                            [checked]="subtask.completed"
+                            (change)="toggleSubtask(subtask.id)"
+                          />
+                          <span class="text-xs">{{ subtask.description }}</span>
+                        </label>
+                      }
+                      @if (task.subtasks.length > 2) {
+                        <span class="badge badge-outline">+{{ task.subtasks.length - 2 }}</span>
+                      }
+                    }
+                  </div>
+                </td>
+                <td>
+                  <div class="flex justify-end gap-2">
+                    <button type="button" class="btn btn-ghost btn-xs" (click)="openDetail(task)">
+                      Ver detalle
+                    </button>
+                    <button type="button" class="btn btn-soft btn-xs" (click)="openEditForm(task)">
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-xs"
+                      [disabled]="mutating()"
+                      (click)="changeTaskStatus(task)"
+                    >
+                      Cambiar estado
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-error btn-xs text-white"
+                      [disabled]="mutating()"
+                      (click)="deleteTask(task)"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="rounded-box border border-dashed border-base-300 p-8 text-center">
+          <p class="text-lg font-semibold">No hay tareas para mostrar</p>
+          <p class="mt-1 text-sm text-base-content/70">
+            Ajusta los filtros o crea una tarea en la siguiente sub-fase.
+          </p>
+        </div>
+      }
+    </div>
+  } @placeholder {
+    <div class="mt-5 space-y-2">
+      <div class="skeleton h-12 w-full"></div>
+      <div class="skeleton h-12 w-full"></div>
+      <div class="skeleton h-12 w-full"></div>
+    </div>
+  }
+
+  <div class="mt-4 flex flex-col items-center justify-between gap-3 md:flex-row">
+    <p class="text-xs text-base-content/70">
+      Pagina {{ currentPage() + 1 }} de {{ totalPages() === 0 ? 1 : totalPages() }}
+    </p>
+    <div class="join">
+      <button
+        type="button"
+        class="btn btn-sm join-item"
+        [disabled]="!hasPreviousPage() || loading()"
+        (click)="goToPage(currentPage() - 1)"
+      >
+        Anterior
+      </button>
+
+      @for (page of pageNumbers(); track page) {
+        <button
+          type="button"
+          class="btn btn-sm join-item"
+          [class.btn-active]="page === currentPage()"
+          [disabled]="loading()"
+          (click)="goToPage(page)"
+        >
+          {{ page + 1 }}
+        </button>
+      }
+
+      <button
+        type="button"
+        class="btn btn-sm join-item"
+        [disabled]="!hasNextPage() || loading()"
+        (click)="goToPage(currentPage() + 1)"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+</section>
+
+<app-task-form
+  [open]="formOpen()"
+  [taskId]="editingTaskId()"
+  (closed)="closeForm()"
+  (saved)="onFormSaved()"
+/>
+
+<app-task-detail
+  [open]="detailOpen()"
+  [taskId]="detailTaskId()"
+  (closed)="closeDetail()"
+  (editRequested)="openEditFromDetail($event)"
+  (deleted)="onDetailDeleted()"
+/>

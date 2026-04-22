@@ -1,0 +1,12 @@
+:host {
+  display: contents;
+}
+
+/* DaisyUI 5 fija .input/.textarea/.select con width: clamp(3rem, 20rem, 100%);
+   En labels flex, eso desalinea bordes entre campos; forzamos ancho al contenedor. */
+:host label > .input,
+:host label > .textarea,
+:host label > .select {
+  width: 100%;
+  max-width: none;
+}

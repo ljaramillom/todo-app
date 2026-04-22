@@ -1,0 +1,31 @@
+<div class="min-h-screen bg-base-200 text-base-content">
+  <header class="navbar border-b border-base-300 bg-base-100 px-4 shadow-sm md:px-6">
+    <div class="navbar-start">
+      <a routerLink="/" class="text-lg font-bold">TODO Tasks</a>
+    </div>
+    <div class="navbar-center hidden gap-2 md:flex">
+      <a
+        routerLink="/"
+        routerLinkActive="btn-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="btn btn-ghost btn-sm"
+      >
+        Dashboard
+      </a>
+      <a routerLink="/tasks" routerLinkActive="btn-active" class="btn btn-ghost btn-sm">
+        Tareas
+      </a>
+    </div>
+    <div class="navbar-end">
+      <button type="button" class="btn btn-primary btn-sm" (click)="openCreateTask()">
+        + Nueva tarea
+      </button>
+    </div>
+  </header>
+
+  <main class="pb-8">
+    <router-outlet />
+  </main>
+</div>
+
+<app-task-form [open]="formOpen()" [taskId]="null" (closed)="closeForm()" (saved)="closeForm()" />
