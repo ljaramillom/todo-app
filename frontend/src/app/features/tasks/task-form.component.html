@@ -24,13 +24,13 @@
           />
           @if (form.controls.title.touched && form.controls.title.invalid) {
             <span class="text-xs text-error">
-              El titulo es obligatorio y debe tener maximo 255 caracteres.
+              El título es obligatorio y debe tener máximo 255 caracteres.
             </span>
           }
         </label>
 
         <label class="flex w-full min-w-0 flex-col gap-1 md:col-span-2">
-          <span class="text-sm font-medium">Descripcion</span>
+          <span class="text-sm font-medium">Descripción</span>
           <textarea
             class="textarea textarea-bordered min-h-24 w-full min-w-0 max-w-full resize-y"
             formControlName="description"
@@ -40,10 +40,10 @@
         </label>
 
         <label class="flex w-full min-w-0 flex-col gap-1">
-          <span class="text-sm font-medium">Fecha de ejecucion *</span>
+          <span class="text-sm font-medium">Fecha de ejecución *</span>
           <input type="datetime-local" class="input input-bordered w-full max-w-full" formControlName="executionDate" />
           @if (form.controls.executionDate.touched && form.controls.executionDate.invalid) {
-            <span class="text-xs text-error">La fecha de ejecucion es obligatoria.</span>
+            <span class="text-xs text-error">La fecha de ejecución es obligatoria.</span>
           }
         </label>
 
@@ -61,7 +61,7 @@
         <section class="rounded-box border border-base-300 bg-base-200/40 p-3 sm:p-4">
           <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <h4 class="text-sm font-semibold uppercase tracking-wide text-base-content/70">
-              Subtareas dinamicas
+              Subtareas dinámicas
             </h4>
             <button
               type="button"
@@ -90,11 +90,11 @@
                     class="input input-bordered input-sm w-full max-w-full"
                     [formControl]="subtaskGroup.controls.description"
                     maxlength="2000"
-                    placeholder="Descripcion de la subtarea"
+                    placeholder="Descripción de la subtarea"
                   />
                   @if (subtaskGroup.controls.description.touched && subtaskGroup.controls.description.invalid) {
                     <span class="text-xs leading-snug text-error">
-                      La descripcion es obligatoria (maximo 2000 caracteres).
+                      La descripción es obligatoria (máximo 2000 caracteres).
                     </span>
                   }
                 </label>
@@ -140,7 +140,7 @@
         <button type="button" class="btn btn-ghost" (click)="closeForm()" [disabled]="submitting()">
           Cancelar
         </button>
-        <button type="submit" class="btn btn-primary" [disabled]="!canSubmit()">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting() || loadingTask() || form.invalid">
           @if (submitting()) {
             <span class="loading loading-spinner loading-xs"></span>
           }

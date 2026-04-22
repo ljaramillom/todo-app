@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
+import { taskStatusLabel } from '@shared/utils/task-status-label';
 import { TaskFormComponent } from './task-form.component';
 import { TaskDetailComponent } from './task-detail.component';
 
@@ -15,6 +16,8 @@ import { TaskDetailComponent } from './task-detail.component';
 })
 export class DashboardComponent {
   private readonly taskStore = inject(TaskStore);
+
+  protected readonly statusLabel = taskStatusLabel;
 
   protected readonly loading = this.taskStore.loading;
   protected readonly mutating = this.taskStore.mutating;
@@ -54,21 +57,6 @@ export class DashboardComponent {
         return 'badge-neutral';
       default:
         return 'badge-ghost';
-    }
-  }
-
-  protected statusLabel(status: TaskStatus): string {
-    switch (status) {
-      case 'PROGRAMADO':
-        return 'Programado';
-      case 'EN_EJECUCION':
-        return 'En ejecucion';
-      case 'FINALIZADA':
-        return 'Finalizada';
-      case 'CANCELADA':
-        return 'Cancelada';
-      default:
-        return status;
     }
   }
 

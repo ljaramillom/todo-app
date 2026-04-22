@@ -1,3 +1,10 @@
 :host {
   display: block;
 }
+
+/* DaisyUI 5: ancho clamp en .input/.select dentro de filtros con label en columna */
+:host label > .input,
+:host label > .select {
+  width: 100%;
+  max-width: none;
+}

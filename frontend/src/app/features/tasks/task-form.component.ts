@@ -73,15 +73,12 @@ export class TaskFormComponent {
 
   protected readonly subtasks = this.form.controls.subtasks;
   protected readonly isEditMode = computed(() => this.taskId() !== null);
-  protected readonly canSubmit = computed(
-    () => !this.submitting() && !this.loadingTask() && this.form.valid
-  );
   protected readonly modalTitle = computed(() =>
     this.isEditMode() ? 'Editar tarea' : 'Crear tarea'
   );
   protected readonly statusOptions: ReadonlyArray<{ label: string; value: TaskStatus }> = [
     { label: 'Programado', value: 'PROGRAMADO' },
-    { label: 'En ejecucion', value: 'EN_EJECUCION' },
+    { label: 'En ejecución', value: 'EN_EJECUCION' },
     { label: 'Finalizada', value: 'FINALIZADA' },
     { label: 'Cancelada', value: 'CANCELADA' }
   ];

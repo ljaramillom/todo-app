@@ -3,7 +3,7 @@
     <div>
       <h2 class="text-xl font-bold">Listado de tareas</h2>
       <p class="mt-1 text-sm text-base-content/70">
-        Gestion central con filtros reactivos, paginacion y acciones rapidas.
+        Gestión central con filtros reactivos, paginación y acciones rápidas.
       </p>
     </div>
     <div class="stats stats-vertical border border-base-300 bg-base-100 shadow-sm md:stats-horizontal">
@@ -27,21 +27,21 @@
   </div>
 
   <div class="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-12">
-    <label class="form-control lg:col-span-4">
-      <span class="label-text text-sm font-medium">Busqueda</span>
+    <label class="flex w-full min-w-0 flex-col gap-1 lg:col-span-4">
+      <span class="text-sm font-medium">Búsqueda</span>
       <input
         type="search"
-        class="input input-bordered"
+        class="input input-bordered w-full max-w-full"
         [value]="searchTerm()"
         (input)="searchTerm.set(($any($event.target)).value)"
-        placeholder="Buscar por titulo o descripcion..."
+        placeholder="Buscar por título o descripción..."
       />
     </label>
 
-    <label class="form-control lg:col-span-3">
-      <span class="label-text text-sm font-medium">Estado</span>
+    <label class="flex w-full min-w-0 flex-col gap-1 lg:col-span-3">
+      <span class="text-sm font-medium">Estado</span>
       <select
-        class="select select-bordered"
+        class="select select-bordered w-full max-w-full"
         [value]="statusFilter()"
         (change)="onStatusFilterChange(($any($event.target)).value)"
       >
@@ -78,7 +78,7 @@
       </button>
       <button
         type="button"
-        class="btn btn-ghost min-w-0 flex-1"
+        class="btn btn-outline border-base-300 bg-base-100 text-base-content hover:border-primary hover:bg-base-200 min-w-0 flex-1"
         [disabled]="activeFiltersCount() === 0"
         (click)="clearFilters()"
       >
@@ -110,11 +110,11 @@
           <div class="skeleton h-12 w-full"></div>
         </div>
       } @else if (hasTasks()) {
-        <table class="table table-zebra">
+        <table class="table table-zebra w-full min-w-[56rem]">
           <thead>
             <tr>
               <th>Tarea</th>
-              <th>Ejecucion</th>
+              <th>Ejecución</th>
               <th>Estado</th>
               <th>Subtareas</th>
               <th class="text-right">Acciones</th>
@@ -122,42 +122,44 @@
           </thead>
           <tbody>
             @for (task of tasks(); track trackByTaskId($index, task)) {
-              <tr>
-                <td>
-                  <div class="max-w-[22rem]">
+              <tr class="align-top">
+                <td class="min-w-0">
+                  <div class="max-w-full">
                     <p class="font-semibold leading-tight">{{ task.title }}</p>
                     <p class="line-clamp-2 text-xs text-base-content/70">
-                      {{ task.description || 'Sin descripcion' }}
+                      {{ task.description || 'Sin descripción' }}
                     </p>
                   </div>
                 </td>
-                <td class="whitespace-nowrap text-sm">
+                <td class="min-w-0 whitespace-nowrap text-sm">
                   {{ task.executionDate | date: 'dd/MM/yyyy HH:mm' }}
                 </td>
-                <td>
+                <td class="min-w-0 whitespace-nowrap">
                   <div class="flex flex-wrap items-center gap-2">
-                    <span class="badge" [class]="statusClass(task.status)">
+                    <span class="badge inline-flex shrink-0 whitespace-nowrap leading-normal" [class]="statusClass(task.status)">
                       {{ statusLabel(task.status) }}
                     </span>
                     @if (isOverdue(task)) {
-                      <span class="badge badge-error text-white">Overdue</span>
+                      <span class="badge badge-error inline-flex shrink-0 whitespace-nowrap text-white">Overdue</span>
                     }
                   </div>
                 </td>
-                <td>
+                <td class="min-w-0">
                   <div class="flex flex-wrap gap-1">
                     @if (task.subtasks.length === 0) {
                       <span class="badge badge-ghost">Sin subtareas</span>
                     } @else {
                       @for (subtask of task.subtasks.slice(0, 2); track trackBySubtaskId($index, subtask)) {
-                        <label class="label cursor-pointer gap-2 rounded-box border border-base-300 px-2 py-1">
+                        <label
+                          class="label inline-flex max-w-full cursor-pointer gap-2 rounded-box border border-base-300 px-2 py-1"
+                        >
                           <input
                             type="checkbox"
-                            class="checkbox checkbox-xs"
+                            class="checkbox checkbox-xs shrink-0"
                             [checked]="subtask.completed"
                             (change)="toggleSubtask(subtask.id)"
                           />
-                          <span class="text-xs">{{ subtask.description }}</span>
+                          <span class="min-w-0 truncate text-xs">{{ subtask.description }}</span>
                         </label>
                       }
                       @if (task.subtasks.length > 2) {
@@ -166,17 +168,17 @@
                     }
                   </div>
                 </td>
-                <td>
-                  <div class="flex justify-end gap-2">
-                    <button type="button" class="btn btn-ghost btn-xs" (click)="openDetail(task)">
+                <td class="min-w-0">
+                  <div class="flex flex-wrap justify-end gap-1 sm:gap-2">
+                    <button type="button" class="btn btn-soft btn-xs shrink-0" (click)="openDetail(task)">
                       Ver detalle
                     </button>
-                    <button type="button" class="btn btn-soft btn-xs" (click)="openEditForm(task)">
+                    <button type="button" class="btn btn-soft btn-xs shrink-0" (click)="openEditForm(task)">
                       Editar
                     </button>
                     <button
                       type="button"
-                      class="btn btn-warning btn-xs"
+                      class="btn btn-warning btn-xs shrink-0"
                       [disabled]="mutating()"
                       (click)="changeTaskStatus(task)"
                     >
@@ -184,7 +186,7 @@
                     </button>
                     <button
                       type="button"
-                      class="btn btn-error btn-xs text-white"
+                      class="btn btn-error btn-xs shrink-0 text-white"
                       [disabled]="mutating()"
                       (click)="deleteTask(task)"
                     >
@@ -215,7 +217,7 @@
 
   <div class="mt-4 flex flex-col items-center justify-between gap-3 md:flex-row">
     <p class="text-xs text-base-content/70">
-      Pagina {{ currentPage() + 1 }} de {{ totalPages() === 0 ? 1 : totalPages() }}
+      Página {{ currentPage() + 1 }} de {{ totalPages() === 0 ? 1 : totalPages() }}
     </p>
     <div class="join">
       <button
