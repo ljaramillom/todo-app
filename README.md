@@ -1,35 +1,50 @@
 # TODO Tasks - Spring Boot + Angular
 
-Aplicación full-stack para gestión de tareas y subtareas checkeables, con búsqueda, paginación, estados, pendientes y alertas de vencimiento.
+Aplicación full-stack para la gestión de tareas diarias con subtareas checkeables, búsqueda, paginación, estados, visualización de pendientes y alertas de vencimiento.
 
-## Stack utilizada
+**Desarrollada siguiendo estrictamente los requisitos de la prueba técnica.**
 
-- Backend: `Java 25 (LTS)` + `Spring Boot 4.0.5`
-- Frontend: `Angular 21.2.x` (Standalone + Signals) + `TailwindCSS 4` + `daisyUI`
-- Base de datos: `PostgreSQL 18` (Docker)
-- Contenedores: `Docker` + `Docker Compose`
+## Stack utilizada (abril 2026)
 
-## Ejecución recomendada (Docker Compose)
+- **Backend**: Java 25 (LTS) + Spring Boot 4.0.5
+- **Frontend**: Angular 21.2.9 (Standalone Components + Signals) + TailwindCSS 4 + daisyUI
+- **Base de datos**: PostgreSQL 18
+- **Contenerización**: Docker + Docker Compose
 
-Comando único recomendado:
+## 🚀 Ejecución recomendada (Docker Compose) - Método más rápido
 
-```bash
-docker compose up --build
-```
+1. Clona el repositorio:
 
-Servicios expuestos por defecto:
+   ```bash
+   git clone <url-del-repositorio>
+   cd todo-app
+   ```
 
-- Frontend: [http://localhost:4200](http://localhost:4200)
-- Backend API: [http://localhost:8080](http://localhost:8080)
-- PostgreSQL: `localhost:5432`
+2. Verifica que el archivo `.env` exista en la raíz del proyecto (ya fue creado durante la configuración inicial de PostgreSQL).
 
-Para detener:
+   Este archivo contiene todas las variables necesarias (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `SPRING_DATASOURCE_*`, etc.).
+
+3. Levanta toda la aplicación con un solo comando:
+
+   ```bash
+   docker compose up --build -d
+   ```
+
+4. Espera a que todos los servicios estén en estado **Up** (puede tardar 20-40 segundos la primera vez).
+
+**URLs de acceso:**
+
+- **Frontend (Angular):** http://localhost:4200
+- **Backend API:** http://localhost:8080
+- **PostgreSQL:** localhost:5432
+
+Para detener todo:
 
 ```bash
 docker compose down
 ```
 
-## Ejecución local (sin Docker Compose)
+## Ejecución local (sin Docker)
 
 ### Backend
 
@@ -46,43 +61,45 @@ npm install
 npm start
 ```
 
-Frontend local (dev server): [http://localhost:4200](http://localhost:4200)
+Frontend se ejecutará en: http://localhost:4200
 
 ## Estructura del repositorio
 
-- `.plan/` - evidencia de uso de IA, roadmap y prompts
-- `backend/` - API REST con Spring Boot
-- `frontend/` - aplicación Angular
-- `docker-compose.yml` - orquestación de `db + backend + frontend`
-- `.env` - variables de entorno para Docker Compose
+- `.plan/` → Evidencia completa de uso de IA (planes y prompts)
+- `backend/` → API Spring Boot
+- `frontend/` → Aplicación Angular
+- `docker-compose.yml` + `.env` → Orquestación completa
+- `README.md` → Este archivo
 
-## Flujos principales para pruebas
+## Flujos principales para probar
 
-1. Crear tarea con subtareas dinámicas.
-2. Editar tarea (incluyendo subtareas existentes/nuevas).
-3. Cambiar estado de tarea y validar badges.
-4. Marcar/desmarcar subtareas desde listado y detalle.
-5. Buscar y filtrar tareas por estado/pendientes/vencidas.
-6. Ver dashboard con:
-   - tareas pendientes de ejecución
-   - alertas de tareas vencidas
-7. Eliminar tarea y validar refresco de vistas.
+1. Accede al **Dashboard** → verás alertas de tareas vencidas y pendientes.
+2. Crea una tarea con subtareas dinámicas.
+3. Edita la tarea (título, descripción, fecha, subtareas).
+4. Cambia estados y marca/desmarca ítems checkeables.
+5. Usa búsqueda, filtros y paginación en el listado.
+6. Elimina una tarea y valida que se actualicen todas las vistas.
 
 ## Evidencia de uso de IA
 
-Toda la evidencia de decisiones, prompts y plan de implementación está en:
+Todo el desarrollo se realizó con apoyo de IA (Grok). La evidencia completa está en la carpeta:
 
-- `.plan/plan-general.md`
-- `.plan/plan-backend.md`
-- `.plan/plan-frontend.md`
-- `.plan/prompts-backend.md`
-- `.plan/prompts-frontend.md`
+`.plan/`
 
-## Estado del plus Docker
+Contiene:
 
-Plus opcional de Docker completado:
+- `plan-general.md`
+- `plan-backend.md`
+- `plan-frontend.md`
+- `prompts-backend.md`
+- `prompts-frontend.md`
+- `data-model.md`
+- `api-spec.md`
 
-- Backend dockerizado
-- Frontend dockerizado con build de producción en Nginx
-- Base de datos PostgreSQL en contenedor
-- Orquestación integral con `docker compose up --build`
+## Plus opcional Docker
+
+Completado al **100%**:
+
+- Backend y Frontend dockerizados
+- PostgreSQL en contenedor
+- Orquestación completa con `docker compose up --build`
