@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TaskStore } from '@core/state/task.store';
-import { Task, TaskStatus } from '@shared/models/task.model';
+import { Task } from '@shared/models/task.model';
+import { taskStatusClass } from '@shared/utils/task-status-class';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
@@ -18,6 +19,7 @@ export class DashboardComponent {
   private readonly taskStore = inject(TaskStore);
 
   protected readonly statusLabel = taskStatusLabel;
+  protected readonly taskStatusClass = taskStatusClass;
 
   protected readonly loading = this.taskStore.loading;
   protected readonly mutating = this.taskStore.mutating;
@@ -43,21 +45,6 @@ export class DashboardComponent {
 
   protected trackByTaskId(index: number, task: Task): number {
     return task.id ?? index;
-  }
-
-  protected statusClass(status: TaskStatus): string {
-    switch (status) {
-      case 'PROGRAMADO':
-        return 'badge-info';
-      case 'EN_EJECUCION':
-        return 'badge-warning';
-      case 'FINALIZADA':
-        return 'badge-success';
-      case 'CANCELADA':
-        return 'badge-neutral';
-      default:
-        return 'badge-ghost';
-    }
   }
 
   protected openCreateTask(): void {

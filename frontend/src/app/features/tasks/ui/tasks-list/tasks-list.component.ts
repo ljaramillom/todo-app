@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } 
 import { DatePipe } from '@angular/common';
 import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
+import { taskStatusClass } from '@shared/utils/task-status-class';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
 import { UpdateTaskRequestDto } from '../../data-access/task.dto';
 import { TaskFormComponent } from '../task-form/task-form.component';
@@ -22,6 +23,7 @@ export class TasksListComponent {
   private readonly searchDebounceMs = 350;
 
   protected readonly statusLabel = taskStatusLabel;
+  protected readonly taskStatusClass = taskStatusClass;
 
   protected readonly searchTerm = signal(this.taskStore.filters().search);
   protected readonly statusFilter = signal<StatusFilterValue>(this.taskStore.filters().status);
@@ -224,21 +226,6 @@ export class TasksListComponent {
   protected async onDetailDeleted(): Promise<void> {
     this.closeDetail();
     await this.reloadCurrentPage();
-  }
-
-  protected statusClass(status: TaskStatus): string {
-    switch (status) {
-      case 'PROGRAMADO':
-        return 'badge-info';
-      case 'EN_EJECUCION':
-        return 'badge-warning';
-      case 'FINALIZADA':
-        return 'badge-success';
-      case 'CANCELADA':
-        return 'badge-neutral';
-      default:
-        return 'badge-ghost';
-    }
   }
 
   protected isOverdue(task: Task): boolean {

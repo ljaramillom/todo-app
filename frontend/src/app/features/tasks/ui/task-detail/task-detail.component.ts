@@ -11,6 +11,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { TaskStore } from '@core/state/task.store';
 import { Task, TaskStatus } from '@shared/models/task.model';
+import { taskStatusClass } from '@shared/utils/task-status-class';
 import { taskStatusLabel } from '@shared/utils/task-status-label';
 import { UpdateTaskRequestDto } from '../../data-access/task.dto';
 import { ConfirmDialogComponent } from '@shared/ui/confirm-dialog/confirm-dialog.component';
@@ -26,6 +27,7 @@ export class TaskDetailComponent {
   private readonly taskStore = inject(TaskStore);
 
   protected readonly statusLabel = taskStatusLabel;
+  protected readonly taskStatusClass = taskStatusClass;
 
   readonly open = input<boolean>(false);
   readonly taskId = input<number | null>(null);
@@ -151,21 +153,6 @@ export class TaskDetailComponent {
     }
 
     await this.loadTask(currentTask.id);
-  }
-
-  protected statusClass(status: TaskStatus): string {
-    switch (status) {
-      case 'PROGRAMADO':
-        return 'badge-info';
-      case 'EN_EJECUCION':
-        return 'badge-warning';
-      case 'FINALIZADA':
-        return 'badge-success';
-      case 'CANCELADA':
-        return 'badge-neutral';
-      default:
-        return 'badge-ghost';
-    }
   }
 
   private async loadTask(taskId: number): Promise<void> {

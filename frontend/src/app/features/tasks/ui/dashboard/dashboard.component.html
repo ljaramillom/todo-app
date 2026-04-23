@@ -94,7 +94,7 @@
                 </p>
               </div>
               <div class="flex items-center gap-2">
-                <span class="badge inline-flex shrink-0 whitespace-nowrap leading-normal" [class]="statusClass(task.status)">
+                <span class="badge inline-flex shrink-0 whitespace-nowrap leading-normal" [class]="taskStatusClass(task.status)">
                   {{ statusLabel(task.status) }}
                 </span>
                 <button type="button" class="btn btn-soft btn-sm" (click)="openDetail(task.id)">
