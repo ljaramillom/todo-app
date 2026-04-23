@@ -147,23 +147,32 @@
                 <td class="min-w-0">
                   <div class="flex flex-wrap gap-1">
                     @if (task.subtasks.length === 0) {
-                      <span class="badge badge-ghost">Sin subtareas</span>
+                      <span
+                        class="inline-block rounded-box border border-dashed border-base-content/25 bg-base-200 px-2 py-1 text-sm text-base-content"
+                        >Sin subtareas</span>
                     } @else {
                       @for (subtask of task.subtasks.slice(0, 2); track trackBySubtaskId($index, subtask)) {
-                        <label
-                          class="label inline-flex max-w-full cursor-pointer gap-2 rounded-box border border-base-300 px-2 py-1"
+                        <div
+                          class="subtask-pill inline-flex max-w-full cursor-default items-center gap-2 rounded-box border border-base-content/20 bg-base-200 px-2 py-1 text-sm text-base-content"
+                          [attr.aria-label]="subtask.completed ? 'Subtarea completada' : 'Subtarea pendiente'"
                         >
                           <input
                             type="checkbox"
-                            class="checkbox checkbox-xs shrink-0"
+                            class="subtask-pill__checkbox checkbox checkbox-xs shrink-0"
                             [checked]="subtask.completed"
-                            (change)="toggleSubtask(subtask.id)"
+                            disabled
+                            tabindex="-1"
                           />
-                          <span class="min-w-0 truncate text-xs">{{ subtask.description }}</span>
-                        </label>
+                          <span
+                            class="min-w-0 truncate font-medium leading-tight"
+                            [class.line-through]="subtask.completed"
+                            >{{ subtask.description }}</span>
+                        </div>
                       }
                       @if (task.subtasks.length > 2) {
-                        <span class="badge badge-outline">+{{ task.subtasks.length - 2 }}</span>
+                        <span
+                          class="inline-flex shrink-0 items-center rounded-box border border-base-content/20 bg-base-200 px-2 py-1 text-sm font-medium text-base-content"
+                          >+{{ task.subtasks.length - 2 }}</span>
                       }
                     }
                   </div>

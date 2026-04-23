@@ -69,18 +69,23 @@
             <h5 class="mb-3 font-semibold">Subtareas</h5>
             <ul class="space-y-2">
               @for (subtask of currentTask.subtasks; track trackBySubtaskId($index, subtask)) {
-                <li class="flex items-center justify-between gap-3 rounded-box border border-base-300 px-3 py-2">
-                  <label class="label cursor-pointer justify-start gap-2">
+                <li class="flex items-center justify-between gap-3 rounded-box border border-base-content/15 bg-base-200 px-3 py-2">
+                  <div
+                    class="flex min-w-0 flex-1 cursor-default items-center gap-2 text-sm text-base-content"
+                    [attr.aria-label]="subtask.completed ? 'Subtarea completada' : 'Subtarea pendiente'"
+                  >
                     <input
                       type="checkbox"
-                      class="checkbox checkbox-sm"
+                      class="task-detail-subtask-checkbox checkbox checkbox-sm shrink-0"
                       [checked]="subtask.completed"
-                      [disabled]="mutating()"
-                      (change)="toggleSubtask(subtask.id)"
+                      disabled
+                      tabindex="-1"
                     />
-                    <span [class.line-through]="subtask.completed">{{ subtask.description }}</span>
-                  </label>
-                  <span class="badge badge-sm" [class.badge-success]="subtask.completed">
+                    <span class="min-w-0 font-medium leading-snug" [class.line-through]="subtask.completed">
+                      {{ subtask.description }}
+                    </span>
+                  </div>
+                  <span class="badge badge-sm shrink-0" [class.badge-success]="subtask.completed">
                     {{ subtask.completed ? 'Completada' : 'Pendiente' }}
                   </span>
                 </li>

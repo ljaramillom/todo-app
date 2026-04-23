@@ -1,3 +1,16 @@
 :host {
   display: contents;
 }
+
+/* Subtareas en detalle: solo lectura; checkbox disabled legible */
+:host .task-detail-subtask-checkbox.checkbox:disabled {
+  opacity: 1;
+  cursor: default;
+  border-color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+}
+
+:host .task-detail-subtask-checkbox.checkbox:disabled:checked {
+  --input-color: var(--color-base-content);
+  border-color: var(--color-base-content);
+  background-color: color-mix(in oklab, var(--color-base-content) 35%, var(--color-base-100));
+}

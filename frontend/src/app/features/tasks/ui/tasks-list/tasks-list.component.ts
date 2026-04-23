@@ -185,11 +185,6 @@ export class TasksListComponent {
     await this.reloadCurrentPage();
   }
 
-  protected async toggleSubtask(subtaskId: number): Promise<void> {
-    await this.taskStore.toggleSubtask(subtaskId);
-    await this.reloadCurrentPage();
-  }
-
   protected openDetail(task: Task): void {
     this.detailTaskId.set(task.id);
     this.detailOpen.set(true);

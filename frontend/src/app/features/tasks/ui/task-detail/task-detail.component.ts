@@ -91,19 +91,6 @@ export class TaskDetailComponent {
     return subtask.id ?? index;
   }
 
-  protected async toggleSubtask(subtaskId: number): Promise<void> {
-    const success = await this.taskStore.toggleSubtask(subtaskId);
-    if (!success) {
-      this.error.set('No se pudo actualizar la subtarea.');
-      return;
-    }
-
-    const currentTaskId = this.taskId();
-    if (currentTaskId !== null) {
-      await this.loadTask(currentTaskId);
-    }
-  }
-
   protected requestEdit(): void {
     const currentTaskId = this.taskId();
     if (currentTaskId !== null) {
