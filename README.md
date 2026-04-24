@@ -16,7 +16,7 @@ Aplicación full-stack para la gestión de tareas diarias con subtareas checkeab
 1. Clona el repositorio:
 
    ```bash
-   git clone <url-del-repositorio>
+   git clone https://github.com/ljaramillom/todo-app.git
    cd todo-app
    ```
 
