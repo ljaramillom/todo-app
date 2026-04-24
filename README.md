@@ -16,13 +16,15 @@ Aplicación full-stack para la gestión de tareas diarias con subtareas checkeab
 1. Clona el repositorio:
 
    ```bash
-   git clone <url-del-repositorio>
+   git clone https://github.com/ljaramillom/todo-app.git
    cd todo-app
    ```
 
-2. Verifica que el archivo `.env` exista en la raíz del proyecto (ya fue creado durante la configuración inicial de PostgreSQL).
+2. Crea el archivo de variables de entorno:
 
-   Este archivo contiene todas las variables necesarias (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `SPRING_DATASOURCE_*`, etc.).
+   ```bash
+   cp .env.example .env
+   ```
 
 3. Levanta toda la aplicación con un solo comando:
 
@@ -65,15 +67,17 @@ Frontend se ejecutará en: http://localhost:4200
 
 ## Estructura del repositorio
 
-- `.plan/` → Evidencia completa de uso de IA (planes y prompts)
-- `backend/` → API Spring Boot
-- `frontend/` → Aplicación Angular
-- `docker-compose.yml` + `.env` → Orquestación completa
-- `README.md` → Este archivo
+- `.plan/` -> Evidencia completa de uso de IA
+- `backend/` -> API Spring Boot
+- `frontend/` -> Aplicación Angular
+- `docker-compose.yml` + `.env.example` -> Orquestación completa
+- `README.md` -> Este archivo
+
+**Nota:** El archivo `.env` está en `.gitignore` por seguridad y no se incluye en el repositorio.
 
 ## Flujos principales para probar
 
-1. Accede al **Dashboard** → verás alertas de tareas vencidas y pendientes.
+1. Accede al Dashboard -> verás alertas de tareas vencidas y pendientes.
 2. Crea una tarea con subtareas dinámicas.
 3. Edita la tarea (título, descripción, fecha, subtareas).
 4. Cambia estados y marca/desmarca ítems checkeables.
@@ -82,7 +86,7 @@ Frontend se ejecutará en: http://localhost:4200
 
 ## Evidencia de uso de IA
 
-Todo el desarrollo se realizó con apoyo de IA (Grok). La evidencia completa está en la carpeta:
+El desarrollo se realizó con apoyo de IA (Grok & Cursor). La evidencia completa está en la carpeta:
 
 `.plan/`
 
@@ -98,7 +102,7 @@ Contiene:
 
 ## Plus opcional Docker
 
-Completado al **100%**:
+Completado al 100%.
 
 - Backend y Frontend dockerizados
 - PostgreSQL en contenedor

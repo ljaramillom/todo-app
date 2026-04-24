@@ -1,0 +1,32 @@
+# Environment variables
+.env
+
+# Backend (Maven / Spring Boot)
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/.idea/
+backend/*.iml
+
+# Frontend (Angular)
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+frontend/.vscode/
+frontend/.DS_Store
+frontend/.env
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
